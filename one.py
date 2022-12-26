@@ -64,6 +64,7 @@ class App(ct.CTk):
         self.savedata = ct.CTkButton(master=self.mainframe, text="Save", command=self.Saving)
         self.savedata.grid(row=3, column=0, padx=20, pady =(0,20) ,sticky='e' ) # w means left while e is right
 
+        self.Reading()#read the last data entered and printing the value 
 
     def Clearing(self):
         #self.textbox.insert("0.0", 'default text')# to insert value
@@ -81,8 +82,24 @@ class App(ct.CTk):
             outfile.write(dataenter)  # to write in the object
 
 
+
+    def Reading(self):
+        with open(BASE_DIR +"\\storage.json") as json_file:
+            readdata = json.load(json_file)
+            listofdata = list(readdata.keys())
+
+            if (len(listofdata) != 0):
+                self.rtitle = listofdata[len(listofdata)-1]
+                self.rdata = readdata[listofdata[len(listofdata)-1]]
+        
+                self.titlepart.insert(0, self.rtitle)#set value in the text
+                self.textbox.insert("0.0", self.rdata)# to insert value
+            
+
+
+
+
 if __name__ == "__main__": 
     app = App()
     app.mainloop()
-
 
