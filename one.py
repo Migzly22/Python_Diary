@@ -2,10 +2,7 @@
 
 import json
 import os
-import numpy as np
-import tkinter as tk
 import customtkinter as ct
-from tkinter import filedialog
 import tkinter.scrolledtext as st
 
 
@@ -79,6 +76,9 @@ class App(ct.CTk):
 
         self.newdata = ct.CTkButton(master=self.mainframe, text="New", command=self.NewEntry)
         self.newdata.grid(row=3, column=0, padx=20, pady =(0,20) )
+
+        self.deletedata = ct.CTkButton(master=self.mainframe, text="Delete", command=self.DelEntry)
+        self.deletedata.grid(row=4, column=0, padx=20, pady =(0,20) )
 
         #show controls
         self.nextentry.configure(state = "disabled") # to disable the next btn
@@ -157,6 +157,24 @@ class App(ct.CTk):
 
         if(self.currentnum == self.numdata):
             self.nextentry.configure(state = "disabled") # to disable the next btn
+
+    def DelEntry(self):
+        print("delete")
+        self.readdata.pop(self.listofdata[self.currentnum-1])
+
+        dataenter = json.dumps(self.readdata, indent=4)
+        with open(BASE_DIR +"\\storage.json", "w") as outfile: # open the file and have a write property
+            outfile.write(dataenter)  # to write in the object
+        
+        if (self.numdata <= 1):
+            self.Clearing()
+            self.titlepart.delete(0, "end")
+            self.nextentry.configure(state = "disabled") # to disable the next btn
+        else:
+            self.Reading()
+            self.DataInit(self.numdata)
+            self.nextentry.configure(state = "disabled") # to disable the next btn
+
 
 if __name__ == "__main__": 
     app = App()
