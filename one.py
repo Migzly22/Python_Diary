@@ -6,32 +6,16 @@ import customtkinter as ct
 import tkinter.scrolledtext as st
 
 
-
 BASE_DIR= os.path.dirname(os.path.abspath(__file__))
-
 
 #Set the initial themes of the app window 
 ct.set_appearance_mode("Dark")
 #ct.set_default_color_theme(BASE_DIR + "\\themes.json")
 
 
-class TextRedirector(object):
-#Handles console output to GUI
-    def __init__(self, widget, tag="stdout"):
-        self.widget = widget
-        self.tag = tag
-    def write(self, str):
-        self.widget.configure(state="normal")
-        self.widget.insert("end", str, (self.tag,)) 
-        self.widget.see("end")
-        self.widget.configure(state="disabled")
-    def flush(self):
-        self.widget.update()
-
-
 class App(ct.CTk):
     WIDTH =800
-    HEIGHT = 600
+    HEIGHT = 450
 
     def __init__(self): 
         super().__init__()
@@ -39,6 +23,7 @@ class App(ct.CTk):
         self.title("DDiary") 
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
         self.resizable (width=False, height=False)
+
 
 
         self.mainframe = ct.CTkFrame(master= self, width= App.WIDTH-40 , corner_radius= 0, height= App.HEIGHT-40) 
@@ -82,7 +67,7 @@ class App(ct.CTk):
 
         #show controls
         self.nextentry.configure(state = "disabled") # to disable the next btn
-
+        
 
     def NewEntry(self):
         self.currentnum = self.numdata + 1
@@ -159,22 +144,19 @@ class App(ct.CTk):
             self.nextentry.configure(state = "disabled") # to disable the next btn
 
     def DelEntry(self):
-        print("delete")
         self.readdata.pop(self.listofdata[self.currentnum-1])
 
         dataenter = json.dumps(self.readdata, indent=4)
         with open(BASE_DIR +"\\storage.json", "w") as outfile: # open the file and have a write property
             outfile.write(dataenter)  # to write in the object
-        
-        if (self.numdata <= 1):
-            self.Clearing()
-            self.titlepart.delete(0, "end")
-            self.nextentry.configure(state = "disabled") # to disable the next btn
-        else:
+            
+        self.Clearing()
+        self.titlepart.delete(0, "end")
+        self.nextentry.configure(state = "disabled") # to disable the next btn
+        if (self.numdata > 1):
             self.Reading()
             self.DataInit(self.numdata)
-            self.nextentry.configure(state = "disabled") # to disable the next btn
-
+            
 
 if __name__ == "__main__": 
     app = App()
