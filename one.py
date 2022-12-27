@@ -2,6 +2,7 @@
 
 import json
 import os
+import tkinter as tk
 import customtkinter as ct
 import tkinter.scrolledtext as st
 
@@ -98,6 +99,7 @@ class App(ct.CTk):
         dataenter = json.dumps(self.readdata, indent=4)
         with open(BASE_DIR +"\\storage.json", "w") as outfile: # open the file and have a write property
             outfile.write(dataenter)  # to write in the object
+            self.notif("Save", "Updated Successfully")
 
         self.Reading()
 
@@ -144,6 +146,7 @@ class App(ct.CTk):
             self.nextentry.configure(state = "disabled") # to disable the next btn
 
     def DelEntry(self):
+        self.notif("Delete", "Deleted Successfully")
         self.readdata.pop(self.listofdata[self.currentnum-1])
 
         dataenter = json.dumps(self.readdata, indent=4)
@@ -156,7 +159,9 @@ class App(ct.CTk):
         if (self.numdata > 1):
             self.Reading()
             self.DataInit(self.numdata)
-            
+    
+    def notif(self, title, msg):
+        tk.messagebox.showinfo(title,  msg)
 
 if __name__ == "__main__": 
     app = App()
